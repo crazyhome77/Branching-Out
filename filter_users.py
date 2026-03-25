@@ -11,11 +11,38 @@ def filter_users_by_name(name):
         print(user)
 
 
+def filter_users_by_age(age):
+    """Filtert Benutzer nach Alter."""
+    try:
+        with open("users.json", "r") as file:
+            users = json.load(file)
+
+        # Wandlung zu Integer falls als String ankommt
+        target_age = int(age)
+        filtered_users = [user for user in users if user.get("age") == target_age]
+
+        if not filtered_users:
+            print(f"Keine Benutzer mit dem Alter {target_age} gefunden.")
+        else:
+            for user in filtered_users:
+                print(user)
+
+    except ValueError:
+        print("Fehler: Bitte gib eine gültige Zahl für das Alter ein.")
+    except FileNotFoundError:
+        print("Fehler: Die Datei 'users.json' wurde nicht gefunden.")
+
+
 if __name__ == "__main__":
-    filter_option = input("What would you like to filter by? (Currently, only 'name' is supported): ").strip().lower()
+    filter_option = input("Nach was möchtest du filtern? (name/age): ").strip().lower()
 
     if filter_option == "name":
-        name_to_search = input("Enter a name to filter users: ").strip()
+        name_to_search = input("Gib den Namen ein: ").strip()
         filter_users_by_name(name_to_search)
+
+    elif filter_option == "age":
+        age_to_search = input("Gib das Alter ein: ").strip()
+        filter_users_by_age(age_to_search)
+
     else:
-        print("Filtering by that option is not yet supported.")
+        print(f"Die Option '{filter_option}' wird noch nicht unterstützt.")
